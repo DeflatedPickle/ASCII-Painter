@@ -7,6 +7,7 @@ import tkinter as tk
 import pkinter as pk
 
 from .toolbar import Toolbar
+from .colourbar import Colourbar
 from .statusbar import Statusbar
 
 
@@ -29,6 +30,11 @@ class Window(tk.Tk):
 
         self.toolbar = Toolbar(self)
         self.toolbar.grid(row=0, column=0, columnspan=2, sticky="we")
+
+        #----------#
+
+        self.colourbar = Colourbar(self)
+        self.colourbar.grid(row=1, column=0, sticky="ns")
 
         #----------#
 
@@ -67,4 +73,4 @@ class Window(tk.Tk):
         if self.toolbar.strike_var.get():
             font += " overstrike"
 
-        self.canvas.place_cell_location(self.canvas.create_text(0, 0, text=self.character, tag="drawn", font=font), event.x, event.y)
+        self.canvas.place_cell_location(self.canvas.create_text(0, 0, text=self.character, fill=self.colourbar.colour_var.get().lower(), tag="drawn", font=font), event.x, event.y)
