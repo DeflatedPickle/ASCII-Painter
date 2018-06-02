@@ -11,7 +11,6 @@ import pkinter as pk
 class Toolbar(pk.Toolbar):
     def __init__(self, parent):
         pk.Toolbar.__init__(self, parent)
-
         self.font_var = tk.StringVar()
         self.font_var.set("Courier")
         self.add_combobox(values=font.families(), textvariable=self.font_var)
@@ -33,5 +32,10 @@ class Toolbar(pk.Toolbar):
         self.strike_var = tk.BooleanVar()
         self.add_checkbutton(text="Overstrike", variable=self.strike_var)
         self.add_separator()
+
+        self.grid_var = tk.BooleanVar()
+        check = self.add_checkbutton(text="Grid", command=parent.canvas.toggle_grid, variable=self.grid_var)
+        parent.canvas._hidden = True
+        check.invoke()
 
 

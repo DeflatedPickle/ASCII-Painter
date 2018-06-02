@@ -28,11 +28,6 @@ class Window(tk.Tk):
 
         #----------#
 
-        self.toolbar = Toolbar(self)
-        self.toolbar.grid(row=0, column=0, columnspan=2, sticky="we")
-
-        #----------#
-
         self.colourbar = Colourbar(self)
         self.colourbar.grid(row=1, column=0, sticky="ns")
 
@@ -45,6 +40,11 @@ class Window(tk.Tk):
 
         self.canvas.bind("<Button-1>", self.draw, "+")
         self.canvas.bind("<B1-Motion>", self.draw, "+")
+
+        #----------#
+
+        self.toolbar = Toolbar(self)
+        self.toolbar.grid(row=0, column=0, columnspan=2, sticky="we")
 
     def interval(self, wait=10):
         for i in self.canvas.find_withtag("mouse"):

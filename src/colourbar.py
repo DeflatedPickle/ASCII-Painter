@@ -13,11 +13,13 @@ class Colourbar(pk.Toolbar):
 
         self.colours = ["Black", "White", "---", "Red", "Yellow", "Blue", "---", "Green", "Orange", "Purple"]
         self.colour_var = tk.StringVar()
-        self.colour_var.set("black")
 
         for n, i in enumerate(self.colours):
             if i == "---":
                 self.add_separator(orient="horizontal", side="top")
 
             else:
-                self.add_radiobutton(text=i, side="top", variable=self.colour_var, value=i)
+                radio = self.add_radiobutton(text=i, side="top", variable=self.colour_var, value=i)
+
+                if i.lower() == "black":
+                    radio.invoke()
