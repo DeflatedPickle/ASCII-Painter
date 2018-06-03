@@ -4,6 +4,7 @@
 
 import tkinter as tk
 from tkinter import font
+import string
 
 import pkinter as pk
 
@@ -13,6 +14,12 @@ class Toolbar(pk.Toolbar):
         pk.Toolbar.__init__(self, parent)
 
         self.add_button(text="New", command=parent.canvas.clear_grid)
+
+        self.add_separator()
+
+        self.char_var = tk.StringVar()
+        self.char_var.set("0")
+        self.add_combobox(values=list(string.ascii_letters + string.digits + string.punctuation), textvariable=self.char_var, width=3)
 
         self.add_separator()
 

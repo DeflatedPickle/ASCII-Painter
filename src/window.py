@@ -26,8 +26,6 @@ class Window(tk.Tk):
         self.mouse_x = 0
         self.mouse_y = 0
 
-        self.character = "0"
-
         #----------#
 
         self.colourbar = Colourbar(self)
@@ -78,7 +76,7 @@ class Window(tk.Tk):
                                 underline=self.toolbar.under_var.get(),
                                 overstrike=self.toolbar.strike_var.get())
 
-            self.canvas.place_cell_location(self.canvas.create_text(0, 0, text=self.character, fill=self.colourbar.colour_var.get().lower(),tag="drawn", font=font), event.x, event.y)
+            self.canvas.place_cell_location(self.canvas.create_text(0, 0, text=self.toolbar.char_var.get(), fill=self.colourbar.colour_var.get().lower(),tag="drawn", font=font), event.x, event.y)
 
         elif self.tools.tool_var.get() == 1:
             self.canvas.remove_cell_location(event.x, event.y)
