@@ -5,7 +5,7 @@
 import pkinter as pk
 
 
-class Statusbar(pk.Statusbar):
+class StatusBar(pk.Statusbar):
     def __init__(self, parent):
         pk.Statusbar.__init__(self, parent)
 

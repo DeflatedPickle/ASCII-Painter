@@ -8,7 +8,7 @@ from tkinter.colorchooser import askcolor
 import pkinter as pk
 
 
-class Colourbar(pk.Toolbar):
+class ColourBar(pk.Toolbar):
     def __init__(self, parent):
         pk.Toolbar.__init__(self, parent)
 
