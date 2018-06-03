@@ -47,6 +47,11 @@ class Window(tk.Tk):
         self.toolbar = Toolbar(self)
         self.toolbar.grid(row=0, column=0, columnspan=2, sticky="we")
 
+        #----------#
+
+        self.statusbar = Statusbar(self)
+        self.statusbar.grid(row=2, column=0, columnspan=2, sticky="we")
+
     def interval(self, wait=10):
         for i in self.canvas.find_withtag("mouse"):
             self.canvas.delete(i)
