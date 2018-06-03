@@ -3,6 +3,7 @@
 """"""
 
 import tkinter as tk
+from tkinter import font
 
 import pkinter as pk
 
@@ -59,18 +60,10 @@ class Window(tk.Tk):
         self.mouse_y = event.y
 
     def draw(self, event=None):
-        font = f"{self.toolbar.font_var.get()} {self.toolbar.size_var.get()}"
-
-        if self.toolbar.bold_var.get():
-            font += " bold"
-
-        if self.toolbar.italic_var.get():
-            font += " italic"
-
-        if self.toolbar.under_var.get():
-            font += " underline"
-
-        if self.toolbar.strike_var.get():
-            font += " overstrike"
+        font = tk.font.Font(family=self.toolbar.font_var.get(), size=self.toolbar.size_var.get(),
+                             weight=self.toolbar.bold_var.get(),
+                             slant=self.toolbar.italic_var.get(),
+                             underline=self.toolbar.under_var.get(),
+                             overstrike=self.toolbar.strike_var.get())
 
         self.canvas.place_cell_location(self.canvas.create_text(0, 0, text=self.character, fill=self.colourbar.colour_var.get().lower(), tag="drawn", font=font), event.x, event.y)
