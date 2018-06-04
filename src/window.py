@@ -14,6 +14,7 @@ from .statusbar import StatusBar
 from .toolbar import ToolBar
 from .optionbar import OptionBar
 from .layerfill import LayerFill
+from .menu import Menu
 
 
 class Window(tk.Tk):
@@ -27,8 +28,9 @@ class Window(tk.Tk):
         self.canvas_width = 501
         self.canvas_height = 501
 
-        self.mouse_x = 0
-        self.mouse_y = 0
+        #----------#
+
+        self.menu = Menu(self)
 
         #----------#
 

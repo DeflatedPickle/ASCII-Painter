@@ -11,7 +11,7 @@ class HotBar(pk.Toolbar):
     def __init__(self, parent):
         pk.Toolbar.__init__(self, parent)
 
-        self.add_button(text="New", command=parent.canvas.clear_grid)
+        self.add_button(text="New", command=parent.menu.new)
 
         self.add_separator()
 
