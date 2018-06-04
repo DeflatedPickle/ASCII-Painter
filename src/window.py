@@ -2,11 +2,15 @@
 # -*- coding: utf-8 -*-
 """"""
 
+import os
+
 import tkinter as tk
 from tkinter import font
 from tkinter import ttk
 
 import pkinter as pk
+import pygame.sysfont
+from PIL import Image, ImageDraw, ImageFont
 
 from .hotbar import HotBar
 from .colourbar import ColourBar
@@ -27,6 +31,11 @@ class Window(tk.Tk):
 
         self.canvas_width = 501
         self.canvas_height = 501
+
+        #----------#
+
+        self.image = Image.new("RGB", (self.canvas_width, self.canvas_height), (255, 255, 255))
+        self.image_draw = ImageDraw.Draw(self.image)
 
         #----------#
 
@@ -107,7 +116,11 @@ class Window(tk.Tk):
                                 underline=self.option_bar.under_var.get(),
                                 overstrike=self.option_bar.strike_var.get())
 
-            self.canvas.place_cell_location(self.canvas.create_text(0, 0, text=self.option_bar.char_var.get(), fill=self.colour_bar.colour_var.get().lower(), tags=("drawn", f"layer{self.layer_fill.layer_var.get()}"), font=font), event.x, event.y)
+            loc = self.canvas.place_cell_location(self.canvas.create_text(0, 0, text=self.option_bar.char_var.get(), fill=self.colour_bar.colour_var.get().lower(), tags=("drawn", f"layer{self.layer_fill.layer_var.get()}"), font=font), event.x, event.y)
+            self.image_draw.text([loc[0], loc[1]], self.option_bar.char_var.get(), (0, 0, 0), ImageFont.truetype(pygame.sysfont.match_font(self.option_bar.font_var.get(),
+                                                                                                                                           1 if self.option_bar.bold_var.get() == "bold" else 0,
+                                                                                                                                           1 if self.option_bar.italic_var.get() == "italic" else 0), self.option_bar.size_var.get() + 5))
+
 
         elif self.tool_bar.tool_var.get() == 1:
             closest = self.canvas.closest_cell(event.x, event.y)
@@ -118,4 +131,5 @@ class Window(tk.Tk):
                               coords[1] if str(coords[1])[-1] == "5" else coords[1] - 5]
 
                 if f"layer{self.layer_fill.layer_var.get()}" in self.canvas.itemcget(self.canvas.cells_contents[new_coords[0], new_coords[1]], "tags"):
-                    self.canvas.remove_cell_location(new_coords[0], new_coords[1])
+                    loc = self.canvas.remove_cell_location(new_coords[0], new_coords[1])
+                    self.image_draw.rectangle([loc[0], loc[1], loc[0] + 9, loc[1] + 9], (255, 255, 255))

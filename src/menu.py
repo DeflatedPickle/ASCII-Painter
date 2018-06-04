@@ -20,6 +20,7 @@ class Menu(tk.Menu):
             ("file", {"items": ["new ~ctrl+n",
                                 "---",
                                 "export postscript",
+                                "export image",
                                 "---",
                                 "exit ~ctrl+q"]}),
             ("view", {"items": ["[grid_var]grid ~ctrl+g"]})
@@ -29,6 +30,7 @@ class Menu(tk.Menu):
 
     def new(self, *args):
         self.parent.canvas.clear_grid()
+        self.parent.image_draw.rectangle([0, 0, self.parent.canvas_width, self.parent.canvas_height], (255, 255, 255))
 
     def export_postscript(self, *args):
         file = filedialog.SaveAs(filetypes=[("PostScript", "*.ps")])
@@ -39,6 +41,15 @@ class Menu(tk.Menu):
 
         self.parent.canvas.update()
         self.parent.canvas.postscript(file=file.filename + ".ps", colormode="color")
+
+    def export_image(self, *args):
+        file = filedialog.SaveAs(filetypes=[("JPEG", "*.jpg;*.jpeg;*.jpe")])
+        file.show()
+
+        if file is None:
+            return
+
+        self.parent.image.save(file.filename + ".jpg")
 
     def exit(self, *args):
         sys.exit()
