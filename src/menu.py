@@ -3,10 +3,21 @@
 """"""
 
 import sys
+import os
 import tkinter as tk
 from tkinter import filedialog
 
 import menumaker as mm
+
+
+def fix_extension(string, ext):
+    split = os.path.splitext(string)
+
+    if not split[1]:
+        return f"{string}.{ext}"
+
+    else:
+        return string
 
 
 class Menu(tk.Menu):
@@ -40,16 +51,17 @@ class Menu(tk.Menu):
             return
 
         self.parent.canvas.update()
-        self.parent.canvas.postscript(file=file.filename + ".ps", colormode="color")
+        self.parent.canvas.postscript(file=fix_extension(file.filename, "ps"), colormode="color")
 
     def export_image(self, *args):
-        file = filedialog.SaveAs(filetypes=[("JPEG", "*.jpg;*.jpeg;*.jpe")])
+        file = filedialog.SaveAs(filetypes=[("PNG", "*.png"),
+                                            ("JPEG", "*.jpg;*.jpeg;*.jpe")])
         file.show()
 
         if file is None:
             return
 
-        self.parent.image.save(file.filename + ".jpg")
+        self.parent.image.save(fix_extension(file.filename, "png"))
 
     def exit(self, *args):
         sys.exit()
