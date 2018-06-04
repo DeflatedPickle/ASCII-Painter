@@ -15,8 +15,7 @@ class HotBar(pk.Toolbar):
 
         self.add_separator()
 
-        self.grid_var = tk.BooleanVar()
-        check = self.add_checkbutton(text="Grid", command=parent.canvas.toggle_grid, variable=self.grid_var)
+        check = self.add_checkbutton(text="Grid", command=parent.menu.grid, variable=parent.menu.grid_var)
         parent.canvas._hidden = True
         check.invoke()
         check.invoke()
