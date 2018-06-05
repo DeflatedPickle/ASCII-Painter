@@ -86,12 +86,12 @@ class Window(tk.Tk):
         frame = ttk.Frame(self.colour_frame)
         frame.grid(row=0, column=0)
 
-        self.primary_colour = ttk.Radiobutton(frame, text="P", variable=self.colour_frame, value=0, style="Toolbutton")
-        self.primary_colour.grid(row=0, column=0)
-        self.primary_colour.invoke()
+        # self.primary_colour = ttk.Radiobutton(frame, text="P", variable=self.colour_frame, value=0, style="Toolbutton")
+        # self.primary_colour.grid(row=0, column=0)
+        # self.primary_colour.invoke()
 
-        self.secondary_colour = ttk.Radiobutton(frame, text="S", variable=self.colour_frame, value=1, style="Toolbutton")
-        self.secondary_colour.grid(row=1, column=0)
+        # self.secondary_colour = ttk.Radiobutton(frame, text="S", variable=self.colour_frame, value=1, style="Toolbutton")
+        # self.secondary_colour.grid(row=1, column=0)
 
         self.colour_picker = ColourPicker(self.colour_frame)
         self.colour_picker.grid(row=0, column=1, padx=2, pady=2, sticky="nesw")
@@ -134,8 +134,8 @@ class Window(tk.Tk):
                                 underline=self.option_bar.under_var.get(),
                                 overstrike=self.option_bar.strike_var.get())
 
-            loc = self.canvas.place_cell_location(self.canvas.create_text(0, 0, text=self.option_bar.char_var.get(), fill=self.colour_bar.colour_var.get().lower(), tags=("drawn", f"layer{self.layer_fill.layer_var.get()}"), font=font), event.x, event.y)
-            self.image_draw.text([loc[0], loc[1]], self.option_bar.char_var.get(), (0, 0, 0), ImageFont.truetype(pygame.sysfont.match_font(self.option_bar.font_var.get(),
+            loc = self.canvas.place_cell_location(self.canvas.create_text(0, 0, text=self.option_bar.char_var.get(), fill=self.colour_picker.final_colour_hex, tags=("drawn", f"layer{self.layer_fill.layer_var.get()}"), font=font), event.x, event.y)
+            self.image_draw.text([loc[0], loc[1]], self.option_bar.char_var.get(), self.colour_picker.final_colour, ImageFont.truetype(pygame.sysfont.match_font(self.option_bar.font_var.get(),
                                                                                                                                            1 if self.option_bar.bold_var.get() == "bold" else 0,
                                                                                                                                            1 if self.option_bar.italic_var.get() == "italic" else 0), self.option_bar.size_var.get() + 5))
 

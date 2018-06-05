@@ -14,6 +14,12 @@ class ColourPicker(tk.Canvas):
     def __init__(self, parent):
         tk.Canvas.__init__(self, parent, width=120, height=110)
 
+        self.brightness = (0, 0, 0)
+        self.colour = (0, 0, 0)
+
+        self.final_colour = (1, 1, 1)
+        self.final_colour_hex = "#000000"
+
         self.brightness_frame = self.create_window(0, 0, window=BrightnessFrame(self), anchor="nw", width=100, height=100)
         self.colour_frame = self.create_window(104, 0, window=ColourFrame(self), anchor="nw", width=20, height=100)
 
@@ -31,11 +37,16 @@ class ColourPicker(tk.Canvas):
     def get_event_colour(self, event):
         return self.get_colour(event.x_root, event.y_root)
 
+    def set_final_colour(self, event, rgb=()):
+        colour = self.get_event_colour(event)
+        self.final_colour = colour
+        self.final_colour_hex = f"#{colour[0]:02x}{colour[1]:02x}{colour[2]:02x}"
+
 class BrightnessFrame(ogltk.OpenGLFrame):
     def __init__(self, parent, width=100, height=100, **kwargs):
         ogltk.OpenGLFrame.__init__(self, parent, **kwargs)
 
-        self.bind("<ButtonRelease-1>", parent.get_event_colour)
+        self.bind("<ButtonRelease-1>", parent.set_final_colour)
 
         self.animate = True
 
