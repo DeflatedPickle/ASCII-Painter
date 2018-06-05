@@ -19,6 +19,7 @@ from .toolbar import ToolBar
 from .optionbar import OptionBar
 from .layerfill import LayerFill
 from .menu import Menu
+from .colourpicker import ColourPicker
 
 
 class Window(tk.Tk):
@@ -78,6 +79,23 @@ class Window(tk.Tk):
         #----------#
 
         self.colour_frame = ttk.Frame(self)
+
+        self.colour_var = tk.IntVar()
+        self.colour_var.set(0)
+
+        frame = ttk.Frame(self.colour_frame)
+        frame.grid(row=0, column=0)
+
+        self.primary_colour = ttk.Radiobutton(frame, text="P", variable=self.colour_frame, value=0, style="Toolbutton")
+        self.primary_colour.grid(row=0, column=0)
+        self.primary_colour.invoke()
+
+        self.secondary_colour = ttk.Radiobutton(frame, text="S", variable=self.colour_frame, value=1, style="Toolbutton")
+        self.secondary_colour.grid(row=1, column=0)
+
+        self.colour_picker = ColourPicker(self.colour_frame)
+        self.colour_picker.grid(row=0, column=1, padx=2, pady=2, sticky="nesw")
+
         self.colour_frame.grid(row=2, column=2, sticky="nesw")
 
         #----------#

@@ -3,6 +3,7 @@
 """"""
 
 import tkinter as tk
+from ctypes import windll
 
 from OpenGL.GL import *
 from OpenGL.GLU import *
@@ -16,10 +17,25 @@ class ColourPicker(tk.Canvas):
         self.brightness_frame = self.create_window(0, 0, window=BrightnessFrame(self), anchor="nw", width=100, height=100)
         self.colour_frame = self.create_window(104, 0, window=ColourFrame(self), anchor="nw", width=20, height=100)
 
+    # Credit: atlasologist
+    # Link: https://stackoverflow.com/questions/22647120/return-rgb-color-of-image-pixel-under-mouse-tkinter
+    def get_colour(self, loc_x, loc_y):
+        dc = windll.user32.GetDC(0)
+        rgb = windll.gdi32.GetPixel(dc, loc_x, loc_y)
+        r = rgb & 0xff
+        g = (rgb >> 8) & 0xff
+        b = (rgb >> 16) & 0xff
+
+        return r, g, b
+
+    def get_event_colour(self, event):
+        return self.get_colour(event.x_root, event.y_root)
 
 class BrightnessFrame(ogltk.OpenGLFrame):
     def __init__(self, parent, width=100, height=100, **kwargs):
         ogltk.OpenGLFrame.__init__(self, parent, **kwargs)
+
+        self.bind("<ButtonRelease-1>", parent.get_event_colour)
 
         self.animate = True
 
@@ -53,6 +69,8 @@ class BrightnessFrame(ogltk.OpenGLFrame):
 class ColourFrame(ogltk.OpenGLFrame):
     def __init__(self, parent, **kwargs):
         ogltk.OpenGLFrame.__init__(self, parent, **kwargs)
+
+        self.bind("<ButtonRelease-1>", parent.get_event_colour)
 
         self.animate = True
 
