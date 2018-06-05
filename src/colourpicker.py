@@ -13,12 +13,12 @@ class ColourPicker(tk.Canvas):
     def __init__(self, parent):
         tk.Canvas.__init__(self, parent)
 
-        self.create_window(0, 0, window=ColourFrame(self), anchor="nw", width=50, height=50)
+        self.brightness_frame = self.create_window(0, 0, window=BrightnessFrame(self), anchor="nw", width=50, height=50)
 
 
-class ColourFrame(ogltk.OpenGLFrame):
-    def __init__(self, parent, *args, **kwargs):
-        ogltk.OpenGLFrame.__init__(self, parent, *args, **kwargs)
+class BrightnessFrame(ogltk.OpenGLFrame):
+    def __init__(self, parent, **kwargs):
+        ogltk.OpenGLFrame.__init__(self, parent, **kwargs)
 
         self.animate = True
 
