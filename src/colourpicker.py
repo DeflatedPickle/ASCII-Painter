@@ -214,6 +214,18 @@ class ColourFrame(ogltk.OpenGLFrame):
             glVertex2f(i, -0.99)  # Bottom left
             glEnd()
 
+        pcoords = self.parent.coords(self.parent.colour_finder)
+        pc = gluUnProject(pcoords[0], pcoords[1], 0)
+        pc = [pc[0] / 50, pc[1] - 0.3]
+        # Pointer
+        glBegin(GL_LINE_LOOP)
+        glColor3f(1.0, 1.0, 1.0)
+        glVertex2f(pc[0] - 1.2, -pc[1] - 0.35)  # Bottom Left
+        glVertex2f(pc[0] + 0.6, -pc[1] - 0.35)  # Bottom Right
+        glVertex2f(pc[0] + 0.6, -pc[1] - 0.25)  # Top Right
+        glVertex2f(pc[0] - 1.2, -pc[1] - 0.25)  # Top Left
+        glEnd()
+
         glFlush()
 
 
