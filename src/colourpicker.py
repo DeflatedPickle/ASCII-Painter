@@ -63,7 +63,7 @@ class BrightnessFrame(ogltk.OpenGLFrame):
     def redraw(self):
         glClear(GL_COLOR_BUFFER_BIT)
 
-        glBegin(GL_QUADS)
+        glBegin(GL_POLYGON)
         glColor3f(0.0, 0.0, 0.0)
         glVertex2i(-1, -1)  # Bottom left
         glColor3f(0.0, 0.0, 0.0)
