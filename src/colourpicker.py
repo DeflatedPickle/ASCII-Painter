@@ -42,25 +42,21 @@ class ColourPicker(tk.Canvas):
         return wx, wy
 
     def move_cfinder(self, event):
-        if 1 < event.y < 145:
+        if 0 < event.y < 145:
             self.coords(self.colour_finder, self._cframe_x, event.y, self._cframe_x + 5, event.y + 5)
 
     def move_bfinder(self, event):
         if 0 < event.x < 145:
-            if 0 < event.y < 145:
-                self.coords(self.brightness_finder, event.x, event.y, event.x + 5, event.y + 5)
-
-        if 0 < event.x < 145:
-            self.coords(self.brightness_finder, event.x, self.coords(self.brightness_finder)[1], event.x + 5, self.coords(self.brightness_finder)[1] + 5)
+            self.coords(self.brightness_finder, event.x - 3, self.coords(self.brightness_finder)[1], event.x + 2, self.coords(self.brightness_finder)[1] + 5)
 
         if 0 < event.y < 145:
-            self.coords(self.brightness_finder, self.coords(self.brightness_finder)[0], event.y, self.coords(self.brightness_finder)[0] + 5, event.y + 5)
+            self.coords(self.brightness_finder, self.coords(self.brightness_finder)[0], event.y - 3, self.coords(self.brightness_finder)[0] + 5, event.y + 2)
 
     # Credit: atlasologist
     # Link: https://stackoverflow.com/questions/22647120/return-rgb-color-of-image-pixel-under-mouse-tkinter
     def get_colour(self, loc_x, loc_y):
         dc = windll.user32.GetDC(0)
-        rgb = windll.gdi32.GetPixel(dc, int(loc_x), int(loc_y))
+        rgb = windll.gdi32.GetPixel(dc, int(loc_x + 1), int(loc_y + 1))
         r = rgb & 0xff
         g = (rgb >> 8) & 0xff
         b = (rgb >> 16) & 0xff

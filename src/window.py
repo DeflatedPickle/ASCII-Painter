@@ -110,7 +110,7 @@ class Window(tk.Tk):
         self.mouse_y = event.y
 
     def draw(self, event=None):
-        if self.tool_bar.tool_var.get() == 0:
+        if not self.tool_bar.tool_var.get():
             font = tk.font.Font(family=self.option_bar.font_var.get(), size=self.option_bar.size_var.get(),
                                 weight=self.option_bar.bold_var.get(),
                                 slant=self.option_bar.italic_var.get(),
@@ -118,10 +118,10 @@ class Window(tk.Tk):
                                 overstrike=self.option_bar.strike_var.get())
 
             loc = self.canvas.place_cell_location(self.canvas.create_text(0, 0, text=self.option_bar.char_var.get(), fill=self.colour_frame.colour_picker.final_colour_hex, tags=("drawn", f"layer{self.layer_fill.layer_var.get()}"), font=font), event.x, event.y)
+
             self.image_draw.text([loc[0], loc[1]], self.option_bar.char_var.get(), self.colour_frame.colour_picker.final_colour, ImageFont.truetype(pygame.sysfont.match_font(self.option_bar.font_var.get(),
                                                                                                                                            1 if self.option_bar.bold_var.get() == "bold" else 0,
                                                                                                                                            1 if self.option_bar.italic_var.get() == "italic" else 0), self.option_bar.size_var.get() + 5))
-
 
         elif self.tool_bar.tool_var.get():
             closest = self.canvas.closest_cell(event.x, event.y)
