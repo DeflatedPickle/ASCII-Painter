@@ -167,14 +167,19 @@ class ColourFrame(ogltk.OpenGLFrame):
 
         self.animate = True
 
-        self.parent.after(1, self.set_parent_colour)
+        self.loop = None
+
+        self.bind("<Enter>", self.set_parent_colour)
+        self.bind("<Leave>", lambda event: self.after_cancel(self.loop))
+
+        # self.parent.after(1, self.set_parent_colour)
 
     def set_colour(self, event):
         self._colour = self.parent.get_colour_window(self.parent.colour_finder)
 
-    def set_parent_colour(self):
+    def set_parent_colour(self, *args):
         self.parent.set_final_colour(None)
-        self.parent.after(1, self.set_parent_colour)
+        self.loop = self.parent.after(1, self.set_parent_colour)
 
     def initgl(self):
         glViewport(0, 0, 50, 150)

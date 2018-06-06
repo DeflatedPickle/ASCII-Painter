@@ -33,8 +33,12 @@ class ColourFrame(ttk.Frame):
         self.colour_picker = ColourPicker(self)
         self.colour_picker.grid(row=0, column=1, padx=2, pady=2, sticky="nesw")
 
-        self.after(self._interval, self.change_colour_button)
+        self.loop = None
+
+        self.colour_picker.bind("<Enter>", self.change_colour_button)
+        self.colour_picker.bind("<Leave>", lambda event: self.after_cancel(self.loop))
 
     def change_colour_button(self, *args):
         ttk.Style().configure("PrimaryColour.Toolbutton", background=self.colour_picker.final_colour_hex)
-        self.after(self._interval, self.change_colour_button)
+
+        self.loop = self.after(self._interval, self.change_colour_button)
