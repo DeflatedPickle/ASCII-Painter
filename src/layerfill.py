@@ -9,9 +9,10 @@ import pkinter as pk
 
 
 class LayerFill(ttk.Frame):
-    def __init__(self, parent):
+    def __init__(self, parent, window):
         ttk.Frame.__init__(self, parent)
         self.parent = parent
+        self.window = window
 
         self.layer_dict = {}
         self.layers = 0
@@ -27,11 +28,11 @@ class LayerFill(ttk.Frame):
         self.layers = len(self.layer_dict.keys())
         self.current_layers.set(self.current_layers.get() + 1)
 
-        frame = Layer(self)
+        frame = Layer(self, self.window, self.layers)
         frame.pack(side="top", fill="x")
 
         self.layer_dict[self.layers] = frame
-        self.layer_dict[self.layers].layer.invoke()
+        self.layer_dict[self.layers].layer_button.invoke()
 
     def delete_layer(self, layer, *args):
         self.current_layers.set(self.current_layers.get() - 1)
@@ -47,10 +48,23 @@ class LayerFill(ttk.Frame):
 
 
 class Layer(pk.Toolbar):
-    def __init__(self, parent):
+    def __init__(self, parent, window, layer):
         pk.Toolbar.__init__(self, parent)
+        self.parent = parent
+        self.window = window
+        self.layer = layer
 
-        # self.hide = frame.add_checkbutton(text="Hide", width=5, side="top")
-        self.layer = self.add_radiobutton(text=f"Layer {parent.layers}", variable=parent.layer_var, value=parent.layers, side="top")
-        self.layer.pack_configure(fill="x")
-        # self.lock = frame.add_checkbutton(text="Lock", width=5, side="top")
+        self.hide_var = tk.BooleanVar()
+        self.hide = self.add_checkbutton(text="Hide", width=5, variable=self.hide_var, command=self.hide_layer)
+
+        self.layer_button = self.add_radiobutton(text=f"Layer {self.layer}", variable=parent.layer_var, value=parent.layers)
+        self.layer_button.pack_configure(fill="x", expand=True)
+
+        # self.lock = self.add_checkbutton(text="Lock", width=5)
+
+    def hide_layer(self, event=None):
+        if self.hide_var.get():
+            self.window.canvas.itemconfig(f"layer{self.layer}", state="hidden")
+
+        else:
+            self.window.canvas.itemconfig(f"layer{self.layer}", state="normal")

@@ -81,7 +81,7 @@ class Window(tk.Tk):
         self.layer_frame.rowconfigure(0, weight=1)
         self.layer_frame.columnconfigure(0, weight=1)
 
-        self.layer_fill = LayerFill(self.layer_frame)
+        self.layer_fill = LayerFill(self.layer_frame, self)
         self.layer_fill.grid(row=0, column=0, sticky="nesw")
 
         self.layer_fill.current_layers.trace_add("write", self.check_layers)
