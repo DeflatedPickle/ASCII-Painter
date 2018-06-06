@@ -19,7 +19,7 @@ from .toolbar import ToolBar
 from .optionbar import OptionBar
 from .layerfill import LayerFill
 from .menu import Menu
-from .colourpicker import ColourPicker
+from .colourframe import ColourFrame
 
 
 class Window(tk.Tk):
@@ -78,24 +78,7 @@ class Window(tk.Tk):
 
         #----------#
 
-        self.colour_frame = ttk.Frame(self)
-
-        self.colour_var = tk.IntVar()
-        self.colour_var.set(0)
-
-        frame = ttk.Frame(self.colour_frame)
-        frame.grid(row=0, column=0)
-
-        # self.primary_colour = ttk.Radiobutton(frame, text="P", variable=self.colour_frame, value=0, style="Toolbutton")
-        # self.primary_colour.grid(row=0, column=0)
-        # self.primary_colour.invoke()
-
-        # self.secondary_colour = ttk.Radiobutton(frame, text="S", variable=self.colour_frame, value=1, style="Toolbutton")
-        # self.secondary_colour.grid(row=1, column=0)
-
-        self.colour_picker = ColourPicker(self.colour_frame)
-        self.colour_picker.grid(row=0, column=1, padx=2, pady=2, sticky="nesw")
-
+        self.colour_frame = ColourFrame(self)
         self.colour_frame.grid(row=2, column=2, sticky="nesw")
 
         #----------#
@@ -134,13 +117,13 @@ class Window(tk.Tk):
                                 underline=self.option_bar.under_var.get(),
                                 overstrike=self.option_bar.strike_var.get())
 
-            loc = self.canvas.place_cell_location(self.canvas.create_text(0, 0, text=self.option_bar.char_var.get(), fill=self.colour_picker.final_colour_hex, tags=("drawn", f"layer{self.layer_fill.layer_var.get()}"), font=font), event.x, event.y)
-            self.image_draw.text([loc[0], loc[1]], self.option_bar.char_var.get(), self.colour_picker.final_colour, ImageFont.truetype(pygame.sysfont.match_font(self.option_bar.font_var.get(),
+            loc = self.canvas.place_cell_location(self.canvas.create_text(0, 0, text=self.option_bar.char_var.get(), fill=self.colour_frame.colour_picker.final_colour_hex, tags=("drawn", f"layer{self.layer_fill.layer_var.get()}"), font=font), event.x, event.y)
+            self.image_draw.text([loc[0], loc[1]], self.option_bar.char_var.get(), self.colour_frame.colour_picker.final_colour, ImageFont.truetype(pygame.sysfont.match_font(self.option_bar.font_var.get(),
                                                                                                                                            1 if self.option_bar.bold_var.get() == "bold" else 0,
                                                                                                                                            1 if self.option_bar.italic_var.get() == "italic" else 0), self.option_bar.size_var.get() + 5))
 
 
-        elif self.tool_bar.tool_var.get() == 1:
+        elif self.tool_bar.tool_var.get():
             closest = self.canvas.closest_cell(event.x, event.y)
 
             if closest is not None:

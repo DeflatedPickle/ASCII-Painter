@@ -11,19 +11,28 @@ import pyopengltk as ogltk
 
 class ColourPicker(tk.Canvas):
     def __init__(self, parent):
-        tk.Canvas.__init__(self, parent, width=120, height=110)
+        tk.Canvas.__init__(self, parent, width=170, height=110)
         parent.update_idletasks()
 
-        self._brightness = (0, 0, 0)
-        self.colour = (0, 0, 0)
+        # self.brightness = (0, 0, 0)
+        self.colour = (255, 0, 0)
 
         self.final_colour = (1, 1, 1)
         self.final_colour_hex = "#000000"
 
-        self.brightness_frame = self.create_window(0, 0, window=BrightnessFrame(self), anchor="nw", width=200, height=200)
-        self.colour_frame = self.create_window(204, 0, window=ColourFrame(self), anchor="nw", width=20, height=200)
+        self._cframe_x = 154
 
-        self.colour_finder = self.create_rectangle(208, 0, 208 + 5, 5)
+        self.brightness_frame = self.create_window(0, 0, window=BrightnessFrame(self), anchor="nw", width=150, height=150)
+        self.colour_frame = self.create_window(self._cframe_x, 0, window=ColourFrame(self), anchor="nw", width=20, height=150)
+
+        self.brightness_finder = self.create_rectangle(0, 0, 5, 5)
+        self.colour_finder = self.create_rectangle(self._cframe_x, 0, self._cframe_x + 5, 5)
+
+        # self.bind("<Button-1>", self.move_bfinder)
+        # self.bind("<B1-Motion>", self.move_bfinder)
+        #
+        # self.bind("<Button-1>", self.move_cfinder, "+")
+        # self.bind("<B1-Motion>", self.move_cfinder, "+")
 
     def canvas_to_window(self, loc_x, loc_y):
         wx = loc_x + self.winfo_rootx()
@@ -31,9 +40,20 @@ class ColourPicker(tk.Canvas):
 
         return wx, wy
 
-    def move_finder(self, event):
-        if 1 < event.y < 195:
-            self.coords(self.colour_finder, 208, event.y, 208 + 5, event.y + 5)
+    def move_cfinder(self, event):
+        if 1 < event.y < 145:
+            self.coords(self.colour_finder, self._cframe_x, event.y, self._cframe_x + 5, event.y + 5)
+
+    def move_bfinder(self, event):
+        if 0 < event.x < 145:
+            if 0 < event.y < 145:
+                self.coords(self.brightness_finder, event.x, event.y, event.x + 5, event.y + 5)
+
+        if 0 < event.x < 145:
+            self.coords(self.brightness_finder, event.x, self.coords(self.brightness_finder)[1], event.x + 5, self.coords(self.brightness_finder)[1] + 5)
+
+        if 0 < event.y < 145:
+            self.coords(self.brightness_finder, self.coords(self.brightness_finder)[0], event.y, self.coords(self.brightness_finder)[0] + 5, event.y + 5)
 
     # Credit: atlasologist
     # Link: https://stackoverflow.com/questions/22647120/return-rgb-color-of-image-pixel-under-mouse-tkinter
@@ -48,10 +68,9 @@ class ColourPicker(tk.Canvas):
 
         return r, g, b
 
-    def get_colour_window(self):
-        x, y, _, _ = self.coords(self.colour_finder)
+    def get_colour_window(self, target):
+        x, y, _, _ = self.coords(target)
         cx, cy = self.canvas_to_window(x, y)
-        print(cx, cy)
 
         return self.get_colour(cx, cy)
 
@@ -59,7 +78,7 @@ class ColourPicker(tk.Canvas):
         return self.get_colour(event.x_root, event.y_root)
 
     def set_final_colour(self, event, rgb=()):
-        colour = self.get_event_colour(event)
+        colour = self.get_colour_window(self.brightness_finder)
         self.final_colour = colour
         self.final_colour_hex = f"#{colour[0]:02x}{colour[1]:02x}{colour[2]:02x}"
 
@@ -75,13 +94,24 @@ class BrightnessFrame(ogltk.OpenGLFrame):
         ogltk.OpenGLFrame.__init__(self, parent, **kwargs)
         self.parent = parent
 
-        self.bind("<Button-1>", parent.set_final_colour)
-        self.bind("<B1-Motion>", parent.set_final_colour)
+        self._brightness = (0, 0, 0)
+
+        self.bind("<Button-1>", parent.move_bfinder)
+        self.bind("<B1-Motion>", parent.move_bfinder)
+
+        # self.bind("<Button-1>", parent.set_final_colour)
+        # self.bind("<B1-Motion>", parent.set_final_colour, "+")
+
+        self.bind("<Button-1>", lambda event: parent.set_final_colour(self._brightness, event), "+")
+        self.bind("<B1-Motion>", lambda event: parent.set_final_colour(self._brightness, event), "+")
 
         self.animate = True
 
+    def set_colour(self, event):
+        self._brightness = self.parent.get_colour_window(self.parent.brightness_finder)
+
     def initgl(self):
-        glViewport(0, 0, self.width * 2, self.height * 2)
+        glViewport(0, 0, 170, 170)
         glClearColor(1.0, 1.0, 1.0, 0.0)
         glShadeModel(GL_SMOOTH)
 
@@ -118,8 +148,8 @@ class ColourFrame(ogltk.OpenGLFrame):
 
         self._colour = (0, 0, 0)
 
-        self.bind("<Motion>", parent.move_finder)
-        self.bind("<B1-Motion>", parent.move_finder)
+        self.bind("<Button-1>", parent.move_cfinder)
+        self.bind("<B1-Motion>", parent.move_cfinder)
 
         self.bind("<Button-1>", self.set_colour, "+")
         self.bind("<Button-1>", lambda event: parent.set_colour(self._colour, event), "+")
@@ -133,10 +163,11 @@ class ColourFrame(ogltk.OpenGLFrame):
         self.animate = True
 
     def set_colour(self, event):
-        self._colour = self.parent.get_colour_window()
+        self._colour = self.parent.get_colour_window(self.parent.colour_finder)
+        self.parent.set_final_colour(event)
 
     def initgl(self):
-        glViewport(0, 0, 50, 200)
+        glViewport(0, 0, 50, 150)
         glClearColor(1.0, 1.0, 1.0, 0.0)
         glShadeModel(GL_SMOOTH)
 
