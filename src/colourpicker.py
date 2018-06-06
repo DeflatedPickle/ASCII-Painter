@@ -6,6 +6,7 @@ import tkinter as tk
 from ctypes import windll
 
 from OpenGL.GL import *
+from OpenGL.GLU import *
 import pyopengltk as ogltk
 
 
@@ -17,20 +18,20 @@ class ColourPicker(tk.Canvas):
         # self.brightness = (0, 0, 0)
         self.colour = (255, 0, 0)
 
-        self.final_colour = (1, 1, 1)
-        self.final_colour_hex = "#000000"
+        self.final_colour = (255, 0, 0)
+        self.final_colour_hex = "#ff0000"
 
         self._cframe_x = 154
 
         self.brightness_frame = self.create_window(0, 0, window=BrightnessFrame(self), anchor="nw", width=150, height=150)
         self.colour_frame = self.create_window(self._cframe_x, 0, window=ColourFrame(self), anchor="nw", width=20, height=150)
 
-        self.brightness_finder = self.create_rectangle(0, 0, 5, 5)
+        self.brightness_finder = self.create_rectangle(145, 0, 148, 5)
         self.colour_finder = self.create_rectangle(self._cframe_x, 0, self._cframe_x + 5, 5)
 
         # self.bind("<Button-1>", self.move_bfinder)
         # self.bind("<B1-Motion>", self.move_bfinder)
-        #
+
         # self.bind("<Button-1>", self.move_cfinder, "+")
         # self.bind("<B1-Motion>", self.move_cfinder, "+")
 
@@ -138,6 +139,17 @@ class BrightnessFrame(ogltk.OpenGLFrame):
         glVertex2i(-1, 1)  # Top left
         glEnd()
 
+        pcoords = self.parent.coords(self.parent.brightness_finder)
+        pc = gluUnProject(pcoords[0], pcoords[1], 0)
+        # Pointer
+        glBegin(GL_LINE_LOOP)
+        glColor3f(1.0, 1.0, 1.0)
+        glVertex2f(pc[0], -pc[1] - 0.35)  # Bottom Left
+        glVertex2f(pc[0] + 0.09, -pc[1] - 0.35)  # Bottom Right
+        glVertex2f(pc[0] + 0.09, -pc[1] - 0.25)  # Top Right
+        glVertex2f(pc[0], -pc[1] - 0.25)  # Top Left
+        glEnd()
+
         glFlush()
 
 
@@ -156,9 +168,6 @@ class ColourFrame(ogltk.OpenGLFrame):
 
         self.bind("<B1-Motion>", self.set_colour, "+")
         self.bind("<B1-Motion>", lambda event: parent.set_colour(self._colour, event), "+")
-
-        # self.bind("<Button-1>", lambda event: parent.set_colour(parent.get_event_colour(event), event), "+")
-        # self.bind("<B1-Motion>", lambda event: parent.set_colour(parent.get_event_colour(event), event), "+")
 
         self.animate = True
 

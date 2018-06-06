@@ -31,8 +31,8 @@ class ColourFrame(ttk.Frame):
         self.colour_picker = ColourPicker(self)
         self.colour_picker.grid(row=0, column=1, padx=2, pady=2, sticky="nesw")
 
-        self.colour_picker.tag_bind(self.colour_picker.brightness_frame, "<Button-1>", self.change_colour_button, "+")
-        self.colour_picker.tag_bind(self.colour_picker.brightness_frame, "<B1-Motion>", self.change_colour_button, "+")
+        # self.colour_picker.tag_bind(self.colour_picker.brightness_frame, "<Button-1>", self.change_colour_button, "+")
+        # self.colour_picker.tag_bind(self.colour_picker.brightness_frame, "<B1-Motion>", self.change_colour_button, "+")
 
     def change_colour_button(self, event):
         print("ff")
