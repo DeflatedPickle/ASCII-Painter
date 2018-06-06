@@ -90,12 +90,23 @@ class Window(tk.Tk):
         self.layer_fill = LayerFill(self.layer_frame)
         self.layer_fill.grid(row=0, column=0, sticky="nesw")
 
+        self.layer_fill.current_layers.trace_add("write", self.check_layers)
+
         self.layer_bar = pk.Toolbar(self.layer_frame)
         self.layer_bar.add_button(text="+", command=self.layer_fill.add_layer)
-        self.layer_bar.add_button(text="-", command=lambda: self.layer_fill.delete_layer(self.layer_fill.selected))
+        self.remove_layer = self.layer_bar.add_button(text="-", command=lambda: self.layer_fill.delete_layer(self.layer_fill.selected))
         self.layer_bar.grid(row=1, column=0, sticky="we")
 
+        self.layer_fill.current_layers.set(0)
+
         self.layer_frame.grid(row=3, column=2, sticky="nesw")
+
+    def check_layers(self, *args):
+        if self.layer_fill.current_layers.get() <= 0:
+            self.remove_layer.configure(state="disabled")
+
+        else:
+            self.remove_layer.configure(state="normal")
 
     def interval(self, wait=10):
         for i in self.canvas.find_withtag("mouse"):

@@ -15,16 +15,17 @@ class LayerFill(ttk.Frame):
 
         self.layer_dict = {}
         self.layers = 0
+        self.current_layers = tk.IntVar()
         self.selected = 0
 
         self.layer_var = tk.IntVar()
         self.layer_var.trace_add("write", self.select_layer)
 
         self.add_layer()
-        self.add_layer()
 
     def add_layer(self, *args):
         self.layers = len(self.layer_dict.keys())
+        self.current_layers.set(self.current_layers.get() + 1)
 
         frame = Layer(self)
         frame.pack(side="top", fill="x")
@@ -33,6 +34,7 @@ class LayerFill(ttk.Frame):
         self.layer_dict[self.layers].layer.invoke()
 
     def delete_layer(self, layer, *args):
+        self.current_layers.set(self.current_layers.get() - 1)
         self.layer_dict[layer].pack_forget()
         self.layer_dict[self.selected - 1 if self.selected > 0 else self.selected + 1].layer.invoke()
 
@@ -50,4 +52,5 @@ class Layer(pk.Toolbar):
 
         # self.hide = frame.add_checkbutton(text="Hide", width=5, side="top")
         self.layer = self.add_radiobutton(text=f"Layer {parent.layers}", variable=parent.layer_var, value=parent.layers, side="top")
+        self.layer.pack_configure(fill="x")
         # self.lock = frame.add_checkbutton(text="Lock", width=5, side="top")
