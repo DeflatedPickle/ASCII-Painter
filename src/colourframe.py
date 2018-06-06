@@ -11,6 +11,7 @@ from .colourpicker import ColourPicker
 class ColourFrame(ttk.Frame):
     def __init__(self, parent):
         ttk.Frame.__init__(self, parent)
+        self._interval = 1
 
         self.rowconfigure(0, weight=1)
 
@@ -19,7 +20,8 @@ class ColourFrame(ttk.Frame):
 
         frame = ttk.Frame(self)
 
-        self.primary_colour = ttk.Radiobutton(frame, text="P", variable=self.colour_var, value=0, style="Toolbutton")
+        ttk.Style().configure("PrimaryColour.Toolbutton")
+        self.primary_colour = ttk.Radiobutton(frame, width=2, variable=self.colour_var, value=0, style="PrimaryColour.Toolbutton")
         self.primary_colour.grid(row=0, column=0)
         self.primary_colour.invoke()
 
@@ -31,9 +33,8 @@ class ColourFrame(ttk.Frame):
         self.colour_picker = ColourPicker(self)
         self.colour_picker.grid(row=0, column=1, padx=2, pady=2, sticky="nesw")
 
-        # self.colour_picker.tag_bind(self.colour_picker.brightness_frame, "<Button-1>", self.change_colour_button, "+")
-        # self.colour_picker.tag_bind(self.colour_picker.brightness_frame, "<B1-Motion>", self.change_colour_button, "+")
+        self.after(self._interval, self.change_colour_button)
 
-    def change_colour_button(self, event):
-        print("ff")
-        self.primary_colour.configure(background=self.colour_picker.final_colour_hex)
+    def change_colour_button(self, *args):
+        ttk.Style().configure("PrimaryColour.Toolbutton", background=self.colour_picker.final_colour_hex)
+        self.after(self._interval, self.change_colour_button)

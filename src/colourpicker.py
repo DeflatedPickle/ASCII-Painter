@@ -74,7 +74,7 @@ class ColourPicker(tk.Canvas):
     def get_event_colour(self, event):
         return self.get_colour(event.x_root, event.y_root)
 
-    def set_final_colour(self, event, rgb=()):
+    def set_final_colour(self, event):
         colour = self.get_colour_window(self.brightness_finder)
         self.final_colour = colour
         self.final_colour_hex = f"#{colour[0]:02x}{colour[1]:02x}{colour[2]:02x}"
@@ -99,8 +99,8 @@ class BrightnessFrame(ogltk.OpenGLFrame):
         # self.bind("<Button-1>", parent.set_final_colour)
         # self.bind("<B1-Motion>", parent.set_final_colour, "+")
 
-        self.bind("<Button-1>", lambda event: parent.set_final_colour(self._brightness, event), "+")
-        self.bind("<B1-Motion>", lambda event: parent.set_final_colour(self._brightness, event), "+")
+        self.bind("<Button-1>", lambda event: parent.set_final_colour(event), "+")
+        self.bind("<B1-Motion>", lambda event: parent.set_final_colour(event), "+")
 
         self.animate = True
 
@@ -167,9 +167,14 @@ class ColourFrame(ogltk.OpenGLFrame):
 
         self.animate = True
 
+        self.parent.after(1, self.set_parent_colour)
+
     def set_colour(self, event):
         self._colour = self.parent.get_colour_window(self.parent.colour_finder)
-        self.parent.set_final_colour(event)
+
+    def set_parent_colour(self):
+        self.parent.set_final_colour(None)
+        self.parent.after(1, self.set_parent_colour)
 
     def initgl(self):
         glViewport(0, 0, 50, 150)
