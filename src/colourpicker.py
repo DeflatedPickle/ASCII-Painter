@@ -50,7 +50,7 @@ class ColourPicker(tk.Canvas):
             self.coords(self.brightness_finder, event.x - 3, self.coords(self.brightness_finder)[1], event.x + 2, self.coords(self.brightness_finder)[1] + 5)
 
         if 0 < event.y < 145:
-            self.coords(self.brightness_finder, self.coords(self.brightness_finder)[0], event.y - 3, self.coords(self.brightness_finder)[0] + 5, event.y + 2)
+            self.coords(self.brightness_finder, self.coords(self.brightness_finder)[0], event.y - 4, self.coords(self.brightness_finder)[0] + 5, event.y + 2)
 
     # Credit: atlasologist
     # Link: https://stackoverflow.com/questions/22647120/return-rgb-color-of-image-pixel-under-mouse-tkinter
@@ -76,6 +76,7 @@ class ColourPicker(tk.Canvas):
 
     def set_final_colour(self, event, rgb=()):
         colour = self.get_colour_window(self.brightness_finder)
+        print(colour)
         self.final_colour = colour
         self.final_colour_hex = f"#{colour[0]:02x}{colour[1]:02x}{colour[2]:02x}"
 
