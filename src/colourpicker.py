@@ -67,7 +67,7 @@ class ColourPicker(tk.Canvas):
 
     def get_colour_window(self, target):
         x, y, _, _ = self.coords(target)
-        cx, cy = self.canvas_to_window(x, y)
+        cx, cy = self.canvas_to_window(x + 1, y + 1)
 
         return self.get_colour(cx, cy)
 
@@ -76,7 +76,6 @@ class ColourPicker(tk.Canvas):
 
     def set_final_colour(self, event, rgb=()):
         colour = self.get_colour_window(self.brightness_finder)
-        print(colour)
         self.final_colour = colour
         self.final_colour_hex = f"#{colour[0]:02x}{colour[1]:02x}{colour[2]:02x}"
 
