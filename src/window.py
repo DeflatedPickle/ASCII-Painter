@@ -13,7 +13,6 @@ import pygame.sysfont
 from PIL import Image, ImageDraw, ImageFont
 
 from .hotbar import HotBar
-from .colourbar import ColourBar
 from .statusbar import StatusBar
 from .toolbar import ToolBar
 from .optionbar import OptionBar
@@ -41,11 +40,6 @@ class Window(tk.Tk):
         #----------#
 
         self.menu = Menu(self)
-
-        #----------#
-
-        self.colour_bar = ColourBar(self)
-        # self.colourbar.grid(row=1, column=0, sticky="ns")
 
         #----------#
 
@@ -107,14 +101,6 @@ class Window(tk.Tk):
 
         else:
             self.remove_layer.configure(state="normal")
-
-    def interval(self, wait=10):
-        for i in self.canvas.find_withtag("mouse"):
-            self.canvas.delete(i)
-
-        self.canvas.create_text(self.mouse_x, self.mouse_y, text=self.character, tag="mouse")
-
-        self.after(wait, self.interval)
 
     def mouse_set(self, event=None):
         self.mouse_x = event.x
