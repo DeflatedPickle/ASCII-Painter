@@ -30,6 +30,7 @@ class Menu(tk.Menu):
         mm.constructor(self, [
             ("file", {"items": ["new ~ctrl+n",
                                 "---",
+                                "export text",
                                 "export postscript",
                                 "export image",
                                 "---",
@@ -42,6 +43,28 @@ class Menu(tk.Menu):
     def new(self, *args):
         self.parent.canvas.clear_grid()
         self.parent.image_draw.rectangle([0, 0, self.parent.canvas_width, self.parent.canvas_height], (255, 255, 255))
+
+    def export_text(self, *args):
+        file = filedialog.asksaveasfile(defaultextension=".txt", filetypes=[("Text", "*.txt")])
+
+        string = ""
+
+        y = 0
+
+        for k in self.parent.canvas.cells_contents.keys():
+            value = self.parent.canvas.cells_contents[k]
+
+            if k[1] == y + self.parent.canvas._cell_height:
+                string += "\r\n"
+                y = k[1]
+
+            if value is not None:
+                string += self.parent.canvas.itemcget(value, "text")
+
+            else:
+                string += " "
+
+        file.write(string)
 
     def export_postscript(self, *args):
         file = filedialog.SaveAs(filetypes=[("PostScript", "*.ps")])
