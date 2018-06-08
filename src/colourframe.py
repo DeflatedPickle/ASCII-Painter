@@ -43,6 +43,8 @@ class ColourFrame(ttk.Frame):
                 self.colour_picker.final_colour = rgb
                 self.colour_picker.final_colour_hex = f"#{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}"
 
+                self.change_colour_button(loop=False)
+
             ttk.Style().configure(f"{i}.Toolbutton", background=i)
             ttk.Button(self.swatch_frame, width=2, command=lambda event=i: set_colour(event), style=f"{i}.Toolbutton").pack(side="left")
 
@@ -53,7 +55,8 @@ class ColourFrame(ttk.Frame):
         self.colour_picker.bind("<Enter>", self.change_colour_button)
         self.colour_picker.bind("<Leave>", lambda event: self.after_cancel(self.loop))
 
-    def change_colour_button(self, *args):
+    def change_colour_button(self, event=None, loop=True):
         ttk.Style().configure("PrimaryColour.Toolbutton", background=self.colour_picker.final_colour_hex)
 
-        self.loop = self.after(self._interval, self.change_colour_button)
+        if loop:
+            self.loop = self.after(self._interval, self.change_colour_button)
