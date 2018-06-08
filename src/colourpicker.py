@@ -12,7 +12,7 @@ import pyopengltk as ogltk
 
 class ColourPicker(tk.Canvas):
     def __init__(self, parent):
-        tk.Canvas.__init__(self, parent, width=170, height=110)
+        tk.Canvas.__init__(self, parent, width=160, height=10)
         parent.update_idletasks()
 
         # self.brightness = (0, 0, 0)
@@ -83,7 +83,7 @@ class ColourPicker(tk.Canvas):
         self.colour = value
 
     def colour_to_float(self, value):
-        return value / 255
+        return value / 256
 
 
 class BrightnessFrame(ogltk.OpenGLFrame):

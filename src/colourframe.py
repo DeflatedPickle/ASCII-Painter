@@ -33,6 +33,21 @@ class ColourFrame(ttk.Frame):
         self.colour_picker = ColourPicker(self)
         self.colour_picker.grid(row=0, column=1, padx=2, pady=2, sticky="nesw")
 
+        self.swatch_frame = ttk.Frame(self)
+
+        for i in ["black", "gray", "red", "orange", "yellow", "lime", "green", "cyan", "blue", "purple", "pink"]:
+            def set_colour(event):
+                rgb = self.winfo_rgb(event)
+                rgb = (int(rgb[0] / 256), int(rgb[1] / 256), int(rgb[2] / 256))
+
+                self.colour_picker.final_colour = rgb
+                self.colour_picker.final_colour_hex = f"#{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}"
+
+            ttk.Style().configure(f"{i}.Toolbutton", background=i)
+            ttk.Button(self.swatch_frame, width=2, command=lambda event=i: set_colour(event), style=f"{i}.Toolbutton").pack(side="left")
+
+        self.swatch_frame.grid(row=1, column=0, columnspan=2)
+
         self.loop = None
 
         self.colour_picker.bind("<Enter>", self.change_colour_button)
