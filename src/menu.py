@@ -30,6 +30,8 @@ class Menu(tk.Menu):
         mm.constructor(self, [
             ("file", {"items": ["new ~ctrl+n",
                                 "---",
+                                "open text ~ctrl+o",
+                                "---",
                                 "export text",
                                 "export postscript",
                                 "export image",
@@ -44,8 +46,35 @@ class Menu(tk.Menu):
         self.parent.canvas.clear_grid()
         self.parent.image_draw.rectangle([0, 0, self.parent.canvas_width, self.parent.canvas_height], (255, 255, 255))
 
+    def open_text(self, *args):
+        file = filedialog.askopenfile(filetypes=[("Text", "*.txt")])
+
+        if file is None:
+            return
+
+        self.new()
+
+        x = 0
+        y = 0
+
+        for i in file.read():
+            if i == "\n":
+                x = 0
+                y += self.parent.canvas._cell_height
+
+            font = self.parent.create_font()
+
+            self.parent.canvas.place_in_cell(self.parent.canvas.create_text(0, 0, text=i, fill=self.parent.colour_frame.colour_picker.final_colour_hex, tags=("drawn", f"layer{self.parent.layer_fill.layer_var.get()}"), font=font), x, y)
+
+            x += self.parent.canvas._cell_width
+
+        file.close()
+
     def export_text(self, *args):
         file = filedialog.asksaveasfile(defaultextension=".txt", filetypes=[("Text", "*.txt")])
+
+        if file is None:
+            return
 
         string = ""
 
@@ -65,6 +94,7 @@ class Menu(tk.Menu):
                 string += " "
 
         file.write(string)
+        file.close()
 
     def export_postscript(self, *args):
         file = filedialog.SaveAs(filetypes=[("PostScript", "*.ps")])
@@ -81,7 +111,7 @@ class Menu(tk.Menu):
                                             ("JPEG", "*.jpg;*.jpeg;*.jpe")])
         file.show()
 
-        if file is None:
+        if file.filename is "":
             return
 
         self.parent.image.save(fix_extension(file.filename, "png"))
