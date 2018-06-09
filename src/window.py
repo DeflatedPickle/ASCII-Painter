@@ -121,6 +121,9 @@ class Window(tk.Tk):
 
             loc = self.canvas.place_cell_location(self.canvas.create_text(0, 0, text=self.option_bar.char_var.get(), fill=self.colour_frame.colour_picker.final_colour_hex, tags=("drawn", f"layer{self.layer_fill.layer_var.get()}"), font=font), event.x, event.y)
 
+            if loc is None:
+                return
+
             self.image_draw.text([loc[0], loc[1]], self.option_bar.char_var.get(), self.colour_frame.colour_picker.final_colour, ImageFont.truetype(pygame.sysfont.match_font(self.option_bar.font_var.get(),
                                                                                                                                            1 if self.option_bar.bold_var.get() == "bold" else 0,
                                                                                                                                            1 if self.option_bar.italic_var.get() == "italic" else 0), self.option_bar.size_var.get() + 5))
