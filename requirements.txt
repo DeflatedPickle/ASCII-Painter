@@ -4,3 +4,4 @@ pillow
 pygame
 pyopengl
 pyopengltk
+pyinstaller
