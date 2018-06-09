@@ -23,7 +23,7 @@ class AboutWindow(tk.Toplevel):
         self.text.insert("end", textwrap.dedent("""\
                                                 ASCII Painter
                                                 
-                                                Version 1.20.10
+                                                Version 1.20.11
                                                 Colour Picker Version 1.0.6
                                                 
                                                 Copyright (c) 2018 DeflatedPickle. MIT.

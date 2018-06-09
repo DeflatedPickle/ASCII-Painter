@@ -119,14 +119,22 @@ class Window(tk.Tk):
         if not self.tool_bar.tool_var.get():
             font = self.create_font()
 
-            loc = self.canvas.place_cell_location(self.canvas.create_text(0, 0, text=self.option_bar.char_var.get(), fill=self.colour_frame.colour_picker.final_colour_hex, tags=("drawn", f"layer{self.layer_fill.layer_var.get()}"), font=font), event.x, event.y)
+            loc = self.canvas.place_cell_location(self.canvas.create_text(0, 0, text=self.option_bar.char_var.get()[0], fill=self.colour_frame.colour_picker.final_colour_hex, tags=("drawn", f"layer{self.layer_fill.layer_var.get()}"), font=font), event.x, event.y)
 
             if loc is None:
                 return
 
-            self.image_draw.text([loc[0], loc[1]], self.option_bar.char_var.get(), self.colour_frame.colour_picker.final_colour, ImageFont.truetype(pygame.sysfont.match_font(self.option_bar.font_var.get(),
-                                                                                                                                           1 if self.option_bar.bold_var.get() == "bold" else 0,
-                                                                                                                                           1 if self.option_bar.italic_var.get() == "italic" else 0), self.option_bar.size_var.get() + 5))
+            if len(self.option_bar.char_var.get()) > 1:
+                for i in range(1, len(self.option_bar.char_var.get())):
+                    self.canvas.place_in_cell(self.canvas.create_text(0, 0, text=self.option_bar.char_var.get()[i], fill=self.colour_frame.colour_picker.final_colour_hex, tags=("drawn", f"layer{self.layer_fill.layer_var.get()}"), font=font), loc[0] + (i * self.canvas._cell_width), loc[1])
+
+            for i in range(1, len(self.option_bar.char_var.get())):
+                self.image_draw.text([loc[0] + (i * self.canvas._cell_width), loc[1]], self.option_bar.char_var.get(),
+                                     self.colour_frame.colour_picker.final_colour,
+                                     ImageFont.truetype(pygame.sysfont.match_font(self.option_bar.font_var.get(),
+                                                                                  1 if self.option_bar.bold_var.get() == "bold" else 0,
+                                                                                  1 if self.option_bar.italic_var.get() == "italic" else 0),
+                                                        self.option_bar.size_var.get() + 5))
 
         elif self.tool_bar.tool_var.get():
             closest = self.canvas.closest_cell(event.x, event.y)
