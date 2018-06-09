@@ -9,6 +9,8 @@ from tkinter import filedialog
 
 import menumaker as mm
 
+from .aboutwindow import AboutWindow
+
 
 def fix_extension(string, ext):
     split = os.path.splitext(string)
@@ -37,10 +39,13 @@ class Menu(tk.Menu):
                                 "export image",
                                 "---",
                                 "exit ~ctrl+q"]}),
-            ("view", {"items": ["[grid_var]grid ~ctrl+g"]})
+            ("view", {"items": ["[grid_var]grid ~ctrl+g"]}),
+            ("help", {"items": ["about ascii painter"]})
         ], scope=locals()["self"])
 
         parent.configure(menu=self)
+
+    #--- New ---#
 
     def new(self, *args):
         self.parent.canvas.clear_grid()
@@ -119,6 +124,13 @@ class Menu(tk.Menu):
     def exit(self, *args):
         sys.exit()
 
+    #--- View ---#
+
     def grid(self, *args):
         self.parent.canvas.toggle_grid()
+
+    #--- Help ---#
+
+    def about_ascii_painter(self, *args):
+        AboutWindow(self.parent)
 
