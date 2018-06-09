@@ -1,0 +1,6 @@
+pkinter
+menumaker
+pillow
+pygame
+pyopengl
+pyopengltk
