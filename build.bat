@@ -1,4 +1,5 @@
 pyinstaller ^
+    --noconsole ^
 	--onedir ^
 	--onefile ^
 	--noconfirm ^
